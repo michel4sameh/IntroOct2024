@@ -9,10 +9,12 @@ public class UnitTest1
         int b = 20;
         int answer;
 
-        answer = a + b;
+        answer = a + b; // System Under Test -(SUT)
 
         Assert.Equal(30, answer);
+
     }
+
     [Theory]
     [InlineData(10, 20, 30)]
     [InlineData(2, 2, 4)]
@@ -20,6 +22,7 @@ public class UnitTest1
     public void CanAddSomeIntegersTogether(int a, int b, int expecting)
     {
         int answer = a + b;
+
         Assert.Equal(expecting, answer);
     }
 }

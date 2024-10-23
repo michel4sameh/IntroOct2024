@@ -14,20 +14,19 @@ public class Calculator
         else if (numbers.Length >= 3)
         {
             int indexOne;
-            bool flag = false;
+            //string temp = "";
 
             for (int i = 0; i < numbers.Length; i++)
             {
-                if (flag)
-                {
-                    flag = false;
-                    continue;
-                }
+                //while (numbers[i] != ',')
+                //{
+                //    temp += numbers[i];
+                //}
 
                 if (numbers[i] == '-')
                 {
                     indexOne = -1 * int.Parse(numbers[i + 1].ToString());
-                    flag = true;
+                    i += 2;
                 }
                 else
                     int.TryParse(numbers[i].ToString(), out indexOne);
