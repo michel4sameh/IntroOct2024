@@ -1,66 +1,31 @@
-﻿
-
-
-
-using Marten;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Software.Api.Catalog;
 
-public class CatalogController(IDocumentSession session) : ControllerBase
+public class CatalogController(CatalogManager catalogManager) : ControllerBase
 {
+
+    [HttpGet("/catalog")]
+    public async Task<ActionResult> GetFullCatalog(CancellationToken token)
+    {
+
+        IReadOnlyList<CatalogResponseModel> response = await catalogManager.GetCatalogAsync(token);
+        return Ok(response);
+    }
+
     [HttpPost("/catalog")]
     public async Task<ActionResult> AddSoftwareToCatalogAsync(
         [FromBody] CatalogCreateModel request)
     {
-
-        // Fake for a minute
-        var response = new CatalogResponseModel()
+        if (!ModelState.IsValid)
         {
-            Id = Guid.NewGuid(),
-            IsOpenSource = request.IsOpenSource,
-            Title = request.Title,
-            Vendor = request.Vendor,
-        };
+            return BadRequest(ModelState); // 400
+        }
 
-        var thingToSave = new CatalogEntity
-        {
-            Id = response.Id,
-            IsOpenSource = response.IsOpenSource,
-            Title = response.Title,
-            Vendor = response.Vendor,
 
-        };
-        session.Store(thingToSave);
-        await session.SaveChangesAsync();
+        CatalogResponseModel response = await catalogManager.AddSoftwareToCatalogAsync(request);
+
 
         return Ok(response);
     }
-}
-/*{
-    "title": "Visual Studio Code",
-    "vendor": "Microsoft",
-    "isOpenSource": true
-}
-*/
-public record CatalogCreateModel
-{
-    public string Title { get; set; } = string.Empty;
-    public string Vendor { get; set; } = string.Empty;
-    public bool IsOpenSource { get; set; }
-}
-
-public record CatalogResponseModel
-{
-    public Guid Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Vendor { get; set; } = string.Empty;
-    public bool IsOpenSource { get; set; }
-}
-public class CatalogEntity
-{
-    public Guid Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Vendor { get; set; } = string.Empty;
-    public bool IsOpenSource { get; set; }
 }
