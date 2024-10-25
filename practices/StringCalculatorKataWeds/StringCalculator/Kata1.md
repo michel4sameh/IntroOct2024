@@ -48,7 +48,7 @@ The idea is that this method, when given a string, has some rules on how to conv
 	- `Add("1\n2,3") => 6`
 6. Custom delimeters. Users can use any single letter delimeter they'd like, and they indicate it by passing an argument to add in the following form:
 	- If they want to use an hash/pound/octothorpe as their delimeter, they would pass:
-		- `Add("//#\n1#2#3") => 6`
+		- `Add("//X\n1X2X3") => 6`
 		- All previous delimeters are still supported, so, for example
 		- `Add("//#\n1#2,3\n1") => 7`
 7. Negative numbers are not allowed. If any of the numbers are negative, an exception is thrown.
